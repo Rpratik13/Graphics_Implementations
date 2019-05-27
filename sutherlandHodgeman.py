@@ -3,6 +3,7 @@ from OpenGL.GLU import *
 from OpenGL.GLUT import *
 import sys
 
+original_points = [[-1, 0], [-1, 7], [2, 4], [2, 1]]
 x_min, y_min = -2, 2
 x_max, y_max = 2, 5
 
@@ -24,6 +25,18 @@ def drawClippingWindow(div):
     glVertex2f(x_max / div, y_max / div)
     glVertex2f(x_min / div, y_max / div)
     glEnd()
+
+def inbetween(start, end):
+    if start[0] == end[0]:
+        for i in range(len(original_points)):
+            if original_points[i][0] == original_points[(i + 1) % len(original_points)][0] == start[0] and ((original_points[i][1] <= start[1] <= original_points[(i + 1) % len(original_points)][1] and original_points[i][1] <= end[1] <= original_points[(i + 1) % len(original_points)][1]) or (original_points[i][1] >= start[1] >= original_points[(i + 1) % len(original_points)][1] and original_points[i][1] >= end[1] >= original_points[(i + 1) % len(original_points)][1])):
+                return True
+
+    else:
+        for i in range(len(original_points)):
+            if original_points[i][1] == original_points[(i + 1) % len(original_points)][1] == start[1] and ((original_points[i][0] <= start[0] <= original_points[(i + 1) % len(original_points)][0] and original_points[i][0] <= end[0] <= original_points[(i + 1) % len(original_points)][0]) or (original_points[i][0] >= start[0] >= original_points[(i + 1) % len(original_points)][0] and original_points[i][0] >= end[0] >= original_points[(i + 1) % len(original_points)][0])):
+                return True
+    return False
 
 
 def leftClipper(start, end):
@@ -122,23 +135,26 @@ def calcDiv(points):
     return (div + 1)
 
 
-def drawPoints(points, div, color='r'):
-    glBegin(GL_LINE_LOOP)
+def drawPoints(start, end, div, color='r'):
+    glBegin(GL_LINES)
     glColor(1, 0, 0, 0)
     if color == 'g':
         glColor(0, 1, 0, 0)
-    for i in points:
-        glVertex2f(i[0] / div, i[1] / div)
+
+    glVertex2f(start[0] / div, start[1] / div)
+    glVertex2f(end[0] / div, end[1] / div)
     glColor(1, 1, 1, 0)
     glEnd()
 
 
 def sutherlandHodgeman():
     drawAxes()
-    points = [[-3, 3.5], [0, 6], [3, 3.5], [0, 1]]
+    plotted = list()
+    points = original_points
     div = calcDiv(points)
     drawClippingWindow(div)
-    drawPoints(points, div)
+    for i in range(len(points)):
+        drawPoints(points[i], points[(i + 1) % len(points)], div)
 
     temp_points = list()
     for i in range(len(points)):
@@ -163,7 +179,10 @@ def sutherlandHodgeman():
         clipped = topClipper(points[i], points[(i + 1) % len(points)])
         temp_points.extend(clipped)
     points = temp_points
-    drawPoints(points, div, color='g')
+
+    for i in range(len(points)):
+        if ((points[i][0] != points[(i + 1) % len(points)][0]) and (points[i][1] != points[(i + 1) % len(points)][1])) or inbetween(points[i], points[(i + 1) % len(points)]) :
+            drawPoints(points[i], points[(i + 1) % len(points)], div, color='g')
     print(points)
     glutSwapBuffers()
 
