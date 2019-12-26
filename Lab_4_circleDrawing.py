@@ -4,8 +4,9 @@ from OpenGL.GLUT import *
 
 import sys
 
-xc, yc = 5, 1
-r = 20
+xc = int(input('Enter xc: '))
+yc = int(input('Enter yc: '))
+r = int(input('Enter radius: '))
 
 def plot(x, y):
 	glBegin(GL_POINTS)
@@ -27,7 +28,6 @@ def circle():
 	p = 1 - r
 
 	while x != y:
-		print('x')
 		x += 1
 		if p < 0:
 			plot(x, y)

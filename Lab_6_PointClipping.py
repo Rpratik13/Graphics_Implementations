@@ -4,9 +4,17 @@ from OpenGL.GLUT import *
 
 import sys
 
-points = [[3, 2], [3, 1], [0, 3], [12, 2], [-1, 2]]
-x_min, x_max = 2, 4
-y_min, y_max = 1, 4
+points = list()
+n = int(input('Enter number of points: '))
+for i in range(n):
+    print('For point P{}: '.format(i))
+    x = int(input('Enter x: '))
+    y = int(input('Enter y: '))
+    points.append([x, y])
+x_min = int(input('Enter x-min: '))
+x_max = int(input('Enter x-max: '))
+y_min = int(input('Enter y-min: '))
+y_max = int(input('Enter y-max: '))
 
 def drawAxes():
     glColor(0, 0, 1, 0)

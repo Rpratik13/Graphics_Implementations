@@ -3,9 +3,18 @@ from OpenGL.GLU import *
 from OpenGL.GLUT import *
 import sys
 
+print('For start point: ')
+x1 = float(input('Enter x: '))
+y1 = float(input('Enter y: '))
+print('For end point: ')
+x2 = float(input('Enter x: '))
+y2 = float(input('Enter y: '))
+x_min = float(input('Enter x_min: '))
+y_min = float(input('Enter y_min: '))
+x_max = float(input('Enter x_max: '))
+y_max = float(input('Enter y_max: '))
 
-x_min, y_min = -2, 2
-x_max, y_max = 2, 5
+point_array = [[x1, y1], [x2, y2]]
 
 
 def drawAxes():
@@ -50,7 +59,7 @@ def calcRegionCode(point):
 		r_code.extend([0, 1])
 	else:
 		r_code.extend([0, 0])
-	
+
 	return r_code
 
 
@@ -95,21 +104,21 @@ def AND(r_code1, r_code2):
 	anded = ''
 	for i, j in zip(r_code1, r_code2):
 		anded += str(i * j)
-	return anded 
+	return anded
 
 def drawPoints(points, div, color='r'):
 	if color == 'g':
 		glColor(0, 1, 0, 0)
 	elif color == 'r':
 		glColor(1, 0, 0, 0)
-	glBegin(GL_LINES)	
+	glBegin(GL_LINES)
 	for i in points:
 		glVertex2f(i[0] / div, i[1] / div)
 	glEnd()
 
 def cohenSutherland():
 	drawAxes()
-	points = [[-1, 3], [4, 4]]
+	points = point_array
 	div = calcDiv(points)
 	drawClippingWindow(div)
 	drawPoints(points, div)
@@ -126,15 +135,15 @@ def cohenSutherland():
 			drawPoints(points, div, color='g')
 
 		elif r_code2 == [0, 0, 0, 0]:
-			points[0] = clip(r_code1, points)			
+			points[0] = clip(r_code1, points)
 			print('Intersection point is ({}, {}).'.format(points[0][0], points[0][1]))
 			drawPoints(points, div, color='g')
-			
+
 		elif r_code1 == [0, 0, 0, 0]:
 			points[1] = clip(r_code2, points, m)
 			print('Intersection point is ({}, {}).'.format(points[1][0], points[1][1]))
 			drawPoints(points, div, color='g')
-			
+
 		else:
 			points[0] = clip(r_code1, points, m)
 			r_code1 = calcRegionCode(points[0])
@@ -147,7 +156,7 @@ def cohenSutherland():
 				print('Line lies completely outside the clipping window.')
 
 	else:
-		print('Line lies completely outside the clipping window.') 
+		print('Line lies completely outside the clipping window.')
 
 	glutSwapBuffers()
 

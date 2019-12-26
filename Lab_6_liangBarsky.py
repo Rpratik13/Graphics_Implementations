@@ -3,14 +3,22 @@ from OpenGL.GLU import *
 from OpenGL.GLUT import *
 import sys
 
+print('For start point: ')
+x1 = float(input('Enter x: '))
+y1 = float(input('Enter y: '))
+print('For end point: ')
+x2 = float(input('Enter x: '))
+y2 = float(input('Enter y: '))
+x_min = float(input('Enter x_min: '))
+y_min = float(input('Enter y_min: '))
+x_max = float(input('Enter x_max: '))
+y_max = float(input('Enter y_max: '))
 
-points = [[-1, 3], [1, 1]]
+points = [[x1, y1], [x2, y2]]
 
 dx = points[1][0] - points[0][0]
 dy = points[1][1] - points[0][1]
 
-x_min, y_min = -2, 2
-x_max, y_max = 2, 5
 
 
 def drawAxes():
@@ -46,7 +54,7 @@ def drawPoints(points, div, color='r'):
 		glColor(0, 1, 0, 0)
 	elif color == 'r':
 		glColor(1, 0, 0, 0)
-	glBegin(GL_LINES)	
+	glBegin(GL_LINES)
 	for i in points:
 		glVertex2f(i[0] / div, i[1] / div)
 	glEnd()
@@ -64,7 +72,7 @@ def liangBarsky():
 	     y_max - points[0][1]]
 	u1 = 0
 	u2 = 1
-	
+
 	for i in range(4):
 		if p[i] != 0:
 			r = (q[i] / p[i])
